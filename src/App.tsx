@@ -9,7 +9,7 @@ import {
   Clock,
   Palette,
 } from 'lucide-react';
-import logoDark from './Assets/HSMDynamicsLogo-Transparent.png';
+import logoDark from './Assets/HSMDynamicsLogo_Transparent.png';
 import logoLight from './Assets/HSMDynamicsLogoLight_Transparent.png';
 import { ChevronUp } from 'lucide-react';
 
