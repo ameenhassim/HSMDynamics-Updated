@@ -115,13 +115,16 @@ function App() {
           <div className="container mx-auto px-6">
             <div className="flex items-center h-20">
               <div className="flex items-center gap-2 flex-1">
-                <a href="#top">
-                  <img
-                    src={isDark ? logoDark : logoLight}
-                    alt="HSM Dynamics Logo"
-                    className="h-40 md:h-44 lg:h-48 w-auto drop-shadow-md transition-all duration-300 cursor-pointer"
-                  />
-                </a>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="cursor-pointer"
+              >
+                <img
+                  src={isDark ? logoDark : logoLight}
+                  alt="HSM Dynamics Logo"
+                  className="h-40 md:h-44 lg:h-48 w-auto drop-shadow-md transition-all duration-300"
+                />
+              </button>
               </div>
               <div className="hidden md:flex items-center justify-center gap-8 flex-1">
                 <span
