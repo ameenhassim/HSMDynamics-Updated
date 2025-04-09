@@ -124,9 +124,24 @@ function App() {
                 </a>
               </div>
               <div className="hidden md:flex items-center justify-center gap-8 flex-1">
-                <a href="#about" className={`hover:text-blue-400 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>About</a>
-                <a href="#services" className={`hover:text-blue-400 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Services</a>
-                <a href="#contact" className={`hover:text-blue-400 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Contact</a>
+                <span
+                  onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="cursor-pointer hover:text-blue-400"
+                >
+                  About
+                </span>
+                <span
+                  onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="cursor-pointer hover:text-blue-400"
+                >
+                  Services
+                </span>
+                <span
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="cursor-pointer hover:text-blue-400"
+                >
+                  Contact
+                </span>
               </div>
               <div className="flex-1 flex justify-end">
                 <button
