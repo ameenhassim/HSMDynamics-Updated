@@ -178,8 +178,11 @@ function App() {
               Transform your business with cutting-edge AI solutions. We build intelligent systems that automate,
               innovate and elevate your operations.
             </p>
-            <a
-              href="#contact"
+            <button
+              onClick={() => {
+                const contactSection = document.getElementById('contact');
+                contactSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className={`group px-8 py-4 rounded-full font-semibold flex items-center gap-2 ${
                 isDark
                   ? 'bg-white text-black hover:bg-blue-500 hover:text-white'
@@ -188,7 +191,7 @@ function App() {
             >
               Build with Us
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+            </button>
 
             {/* Scroll Down Visual Cue */}
             <div className="mt-8 flex justify-center">
