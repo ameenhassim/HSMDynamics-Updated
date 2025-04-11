@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import emailjs from '@emailjs/browser';
 import {
   ArrowRight,
   Bot,
@@ -42,6 +43,41 @@ function App() {
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+  });
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      name: '',
+      email: '',
+    };
+    let isValid = true;
+
+    if (!name.trim()) {
+      newErrors.name = 'Please enter your name';
+      isValid = false;
+    }
+
+    if (!email.trim()) {
+      newErrors.email = 'Please enter your email address';
+      isValid = false;
+    } else if (!validateEmail(email)) {
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,10 +87,40 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log({ name, email, message });
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      await emailjs.send(
+        'default_service',
+        'template_default',
+        {
+          from_name: name,
+          from_email: email,
+          message: message,
+          to_email: 'ameenhassim23@gmail.com',
+        },
+        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+      );
+      
+      setSubmitStatus('success');
+      setName('');
+      setEmail('');
+      setMessage('');
+      setErrors({ name: '', email: '' });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -316,14 +382,22 @@ function App() {
                   placeholder="Full Name *"
                   required
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    if (errors.name) {
+                      setErrors(prev => ({ ...prev, name: '' }));
+                    }
+                  }}
                   className={`w-full p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-400
                   ${
                     isDark
                       ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700'
                       : 'bg-white text-black placeholder-gray-400 border-gray-300'
-                  }`}
+                  } ${errors.name ? 'border-red-500' : ''}`}
                 />
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                )}
               </div>
               <div>
                 <input
@@ -331,14 +405,22 @@ function App() {
                   placeholder="Email Address *"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (errors.email) {
+                      setErrors(prev => ({ ...prev, email: '' }));
+                    }
+                  }}
                   className={`w-full p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-400
                   ${
                     isDark
                       ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700'
                       : 'bg-white text-black placeholder-gray-400 border-gray-300'
-                  }`}
+                  } ${errors.email ? 'border-red-500' : ''}`}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
               </div>
               <div>
                 <textarea
@@ -356,52 +438,66 @@ function App() {
               </div>
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className={`group px-8 py-4 rounded-full font-semibold flex items-center justify-center gap-2 w-full ${
                   isDark
                     ? 'bg-white text-black hover:bg-blue-500 hover:text-white'
                     : 'bg-black text-white hover:bg-blue-500'
-                }`}
+                } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
+              {submitStatus === 'success' && (
+                <p className="text-green-500 text-center mt-4">
+                  Message sent successfully!
+                </p>
+              )}
+              {submitStatus === 'error' && (
+                <p className="text-red-500 text-center mt-4">
+                  Failed to send message. Please try again.
+                </p>
+              )}
             </form>
           </div>
         </section>
 
+        {/* Try Me Arrow Label for Voiceflow */}
+        <div
+          className={`
+            fixed bottom-6 right-20 z-50 hidden md:flex flex-row items-center space-x-2
+            transition-opacity duration-500 ease-in-out
+            ${isScrolled ? 'opacity-30' : 'opacity-100'}
+            animate-pulse
+          `}
+        >
+          <div
+            className={`
+              px-4 py-2 rounded-lg text-sm font-medium shadow-lg backdrop-blur-md
+              transition-colors duration-300 flex items-center space-x-2
+              ${isDark ? 'bg-white/90 text-black' : 'bg-black/90 text-white'}
+            `}
+          >
+            <Sparkle className="w-4 h-4" />
+            <span>Ask AI</span>
+          </div>
 
-{/* Try Me Arrow Label for Voiceflow */}
-<div
-  className={`
-    fixed bottom-6 right-20 z-50 flex flex-row items-center space-x-2
-    transition-opacity duration-500 ease-in-out
-    ${isScrolled ? 'opacity-30' : 'opacity-100'}
-    animate-pulse
-  `}
->
-  <div
-    className={`
-      px-4 py-2 rounded-lg text-sm font-medium shadow-lg backdrop-blur-md
-      transition-colors duration-300 flex items-center space-x-2
-      ${isDark ? 'bg-white/90 text-black' : 'bg-black/90 text-white'}
-    `}
-  >
-    <Sparkle className="w-4 h-4" />
-    <span>Ask AI</span>
-  </div>
-
-  <svg
-    className={`w-5 h-5 transition-colors duration-300 ${isDark ? 'text-white' : 'text-black'}`}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    viewBox="0 0 24 24"
-  >
-    <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-</div>
-
-
+          <svg
+            className={`w-5 h-5 transition-colors duration-300 ${
+              isDark ? 'text-white' : 'text-black'
+            }`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M5 12h14M12 5l7 7-7 7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
       </div>
       <ScrollToTopButton isDark={isDark} />
     </div>
