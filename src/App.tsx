@@ -20,6 +20,10 @@ function TypewriterText({ text }: { text: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    window.scrollTo(0, 0);  // Instantly scrolls to the top
+  }, []);
+
+  useEffect(() => {
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
         setDisplayText((prev) => prev + text[currentIndex]);
@@ -124,6 +128,16 @@ function App() {
   };
 
   useEffect(() => {
+
+      // 1. Clear any known Voiceflow session data
+  localStorage.clear();
+  sessionStorage.clear();
+
+  // 2. Remove any existing Voiceflow script if it's already there
+  const existingScript = document.querySelector('script[src*="voiceflow.com/widget"]');
+  if (existingScript) {
+    existingScript.remove();
+  }
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
