@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ArrowRight,
   Bot,
@@ -8,6 +8,7 @@ import {
   Moon,
   Clock,
   Palette,
+  Sparkle,
 } from 'lucide-react';
 import logoDark from './Assets/HSMDynamicsLogo_Transparent.png';
 import logoLight from './Assets/HSMDynamicsLogoLight_Transparent.png';
@@ -41,7 +42,6 @@ function App() {
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,6 +56,25 @@ function App() {
     // Handle form submission here
     console.log({ name, email, message });
   };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
+    script.type = 'text/javascript';
+    script.onload = () => {
+      // @ts-ignore
+      window.voiceflow.chat.load({
+        verify: { projectID: '67f8290560582c52d7eb0b06' },
+        url: 'https://general-runtime.voiceflow.com',
+        versionID: 'production',
+        voice: {
+          url: 'https://runtime-api.voiceflow.com',
+        },
+      });
+    };
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <div
@@ -74,13 +93,15 @@ function App() {
       >
         {/* Mesh Pattern Overlay */}
         <div className="absolute inset-0 bg-mesh opacity-5"></div>
-        
+
         {/* Radial Gradient Overlay */}
-        <div className={`absolute inset-0 bg-gradient-radial ${
-          isDark 
-            ? 'from-blue-500/10 via-purple-500/5 to-transparent'
-            : 'from-blue-200/20 via-purple-200/10 to-transparent'
-        }`}></div>
+        <div
+          className={`absolute inset-0 bg-gradient-radial ${
+            isDark
+              ? 'from-blue-500/10 via-purple-500/5 to-transparent'
+              : 'from-blue-200/20 via-purple-200/10 to-transparent'
+          }`}
+        ></div>
 
         {/* Animated Blobs */}
         <div className="absolute inset-0 opacity-30">
@@ -92,7 +113,9 @@ function App() {
         </div>
 
         {/* Additional Decorative Elements */}
-        <div className={`absolute inset-0 ${isDark ? 'opacity-30' : 'opacity-10'}`}>
+        <div
+          className={`absolute inset-0 ${isDark ? 'opacity-30' : 'opacity-10'}`}
+        >
           <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full filter blur-3xl"></div>
         </div>
@@ -115,32 +138,46 @@ function App() {
           <div className="container mx-auto px-6">
             <div className="flex items-center h-20">
               <div className="flex items-center gap-2 flex-1">
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="cursor-pointer"
-              >
-                <img
-                  src={isDark ? logoDark : logoLight}
-                  alt="HSM Dynamics Logo"
-                  className="h-40 md:h-44 lg:h-48 w-auto drop-shadow-md transition-all duration-300"
-                />
-              </button>
+                <button
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                  className="cursor-pointer"
+                >
+                  <img
+                    src={isDark ? logoDark : logoLight}
+                    alt="HSM Dynamics Logo"
+                    className="h-40 md:h-44 lg:h-48 w-auto drop-shadow-md transition-all duration-300"
+                  />
+                </button>
               </div>
               <div className="hidden md:flex items-center justify-center gap-8 flex-1">
                 <span
-                  onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() =>
+                    document
+                      .getElementById('about')
+                      ?.scrollIntoView({ behavior: 'smooth' })
+                  }
                   className="cursor-pointer hover:text-blue-400"
                 >
                   About
                 </span>
                 <span
-                  onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() =>
+                    document
+                      .getElementById('services')
+                      ?.scrollIntoView({ behavior: 'smooth' })
+                  }
                   className="cursor-pointer hover:text-blue-400"
                 >
                   Services
                 </span>
                 <span
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() =>
+                    document
+                      .getElementById('contact')
+                      ?.scrollIntoView({ behavior: 'smooth' })
+                  }
                   className="cursor-pointer hover:text-blue-400"
                 >
                   Contact
@@ -150,10 +187,16 @@ function App() {
                 <button
                   onClick={() => setIsDark(!isDark)}
                   className={`p-3 rounded-full ${
-                    isDark ? 'bg-white/10 hover:bg-white/20' : 'bg-black/10 hover:bg-black/20'
+                    isDark
+                      ? 'bg-white/10 hover:bg-white/20'
+                      : 'bg-black/10 hover:bg-black/20'
                   }`}
                 >
-                  {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  {isDark ? (
+                    <Sun className="w-5 h-5" />
+                  ) : (
+                    <Moon className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -165,18 +208,27 @@ function App() {
           <div className="container mx-auto px-6 pt-32 text-center flex flex-col items-center gap-16">
             <h1
               className={`text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r animate-gradient max-w-5xl leading-tight md:leading-[1.15] ${
-                isDark ? 'from-white via-blue-500 to-white' : 'from-black via-blue-500 to-black'
+                isDark
+                  ? 'from-white via-blue-500 to-white'
+                  : 'from-black via-blue-500 to-black'
               }`}
             >
-              Unlock the Power of<br />Autonomous Intelligence
+              Unlock the Power of
+              <br />
+              Autonomous Intelligence
             </h1>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-blue-400 animate-pulse" />
               <TypewriterText text="This website was built in under 24 hours" />
             </div>
-            <p className={`text-xl max-w-2xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              Transform your business with cutting-edge AI solutions. We build intelligent systems that automate,
-              innovate and elevate your operations.
+            <p
+              className={`text-xl max-w-2xl ${
+                isDark ? 'text-gray-400' : 'text-gray-600'
+              }`}
+            >
+              Transform your business with cutting-edge AI solutions. We build
+              intelligent systems that automate, innovate and elevate your
+              operations.
             </p>
             <button
               onClick={() => {
@@ -204,8 +256,14 @@ function App() {
         <section id="about" className="py-24 bg-transparent">
           <div className="container mx-auto px-6 text-center max-w-3xl">
             <h2 className="text-4xl font-bold mb-8">About HSM Dynamics</h2>
-            <p className={`text-lg leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              We specialise in AI automation that redefines business performance. Our intelligent systems are designed to streamline operations, scale effortlessly and drive measurable growth.
+            <p
+              className={`text-lg leading-relaxed ${
+                isDark ? 'text-gray-400' : 'text-gray-600'
+              }`}
+            >
+              We specialise in AI automation that redefines business
+              performance. Our intelligent systems are designed to streamline
+              operations, scale effortlessly and drive measurable growth.
             </p>
           </div>
         </section>
@@ -240,9 +298,16 @@ function App() {
         {/* Contact Section */}
         <section id="contact" className="py-24 bg-transparent">
           <div className="container mx-auto px-6 text-center max-w-xl">
-            <h2 className="text-4xl font-bold mb-8">Ready to Transform Your Business?</h2>
-            <p className={`text-lg mb-12 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              Let's discuss how we can automate and elevate your business operations with our cutting-edge AI solutions.
+            <h2 className="text-4xl font-bold mb-8">
+              Ready to Transform Your Business?
+            </h2>
+            <p
+              className={`text-lg mb-12 ${
+                isDark ? 'text-gray-400' : 'text-gray-600'
+              }`}
+            >
+              Let's discuss how we can automate and elevate your business
+              operations with our cutting-edge AI solutions.
             </p>
             <form onSubmit={handleSubmit} className="grid gap-6 text-left">
               <div>
@@ -253,7 +318,11 @@ function App() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className={`w-full p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-400
-                  ${isDark ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700' : 'bg-white text-black placeholder-gray-400 border-gray-300'}`}
+                  ${
+                    isDark
+                      ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700'
+                      : 'bg-white text-black placeholder-gray-400 border-gray-300'
+                  }`}
                 />
               </div>
               <div>
@@ -264,7 +333,11 @@ function App() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`w-full p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-400
-                  ${isDark ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700' : 'bg-white text-black placeholder-gray-400 border-gray-300'}`}
+                  ${
+                    isDark
+                      ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700'
+                      : 'bg-white text-black placeholder-gray-400 border-gray-300'
+                  }`}
                 />
               </div>
               <div>
@@ -274,13 +347,19 @@ function App() {
                   placeholder="Tell us about your project..."
                   rows={5}
                   className={`w-full p-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-400
-                    ${isDark ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700' : 'bg-white text-black placeholder-gray-400 border-gray-300'}`}
+                    ${
+                      isDark
+                        ? 'bg-gray-900 text-white placeholder-gray-500 border-gray-700'
+                        : 'bg-white text-black placeholder-gray-400 border-gray-300'
+                    }`}
                 />
               </div>
               <button
                 type="submit"
                 className={`group px-8 py-4 rounded-full font-semibold flex items-center justify-center gap-2 w-full ${
-                  isDark ? 'bg-white text-black hover:bg-blue-500 hover:text-white' : 'bg-black text-white hover:bg-blue-500'
+                  isDark
+                    ? 'bg-white text-black hover:bg-blue-500 hover:text-white'
+                    : 'bg-black text-white hover:bg-blue-500'
                 }`}
               >
                 Send Message
@@ -289,13 +368,57 @@ function App() {
             </form>
           </div>
         </section>
+
+
+{/* Try Me Arrow Label for Voiceflow */}
+<div
+  className={`
+    fixed bottom-6 right-20 z-50 flex flex-row items-center space-x-2
+    transition-opacity duration-500 ease-in-out
+    ${isScrolled ? 'opacity-30' : 'opacity-100'}
+    animate-pulse
+  `}
+>
+  <div
+    className={`
+      px-4 py-2 rounded-lg text-sm font-medium shadow-lg backdrop-blur-md
+      transition-colors duration-300 flex items-center space-x-2
+      ${isDark ? 'bg-white/90 text-black' : 'bg-black/90 text-white'}
+    `}
+  >
+    <Sparkle className="w-4 h-4" />
+    <span>Ask AI</span>
+  </div>
+
+  <svg
+    className={`w-5 h-5 transition-colors duration-300 ${isDark ? 'text-white' : 'text-black'}`}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+  >
+    <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+</div>
+
+
       </div>
       <ScrollToTopButton isDark={isDark} />
     </div>
   );
 }
 
-function ServiceCard({ icon, title, description, isDark }: { icon: React.ReactNode; title: string; description: string; isDark: boolean }) {
+function ServiceCard({
+  icon,
+  title,
+  description,
+  isDark,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  isDark: boolean;
+}) {
   return (
     <div
       className={`p-8 rounded-2xl transition-all duration-300 ${
@@ -304,9 +427,13 @@ function ServiceCard({ icon, title, description, isDark }: { icon: React.ReactNo
           : 'bg-gradient-to-br from-gray-100 to-white border border-gray-200 hover:border-blue-500'
       }`}
     >
-      <div className="bg-blue-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6">{icon}</div>
+      <div className="bg-blue-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+        {icon}
+      </div>
       <h3 className="text-2xl font-bold mb-4">{title}</h3>
-      <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{description}</p>
+      <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+        {description}
+      </p>
     </div>
   );
 }
@@ -330,11 +457,16 @@ function ScrollToTopButton({ isDark }: { isDark: boolean }) {
     <button
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className={`fixed bottom-6 right-6 z-50 p-3 rounded-full shadow-lg transition-opacity duration-300 ${
+      title="Scroll to top"
+      className={`fixed bottom-[90px] sm:bottom-24 right-5 z-50 p-3 rounded-full shadow-lg transition-opacity duration-300 ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      } ${isDark ? 'bg-white text-black hover:bg-blue-500 hover:text-white' : 'bg-black text-white hover:bg-blue-500'}`}
+      } ${
+        isDark
+          ? 'bg-white text-black hover:bg-blue-500 hover:text-white'
+          : 'bg-black text-white hover:bg-blue-500'
+      }`}
     >
-      <ChevronUp className="w-5 h-5" />
+      <ChevronUp className="w-5 h-5 md:w-6 md:h-6" />
     </button>
   );
 }
