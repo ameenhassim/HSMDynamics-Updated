@@ -128,24 +128,13 @@ function App() {
   };
 
   useEffect(() => {
-
-      // 1. Clear any known Voiceflow session data
-  localStorage.clear();
-  sessionStorage.clear();
-
-  // 2. Remove any existing Voiceflow script if it's already there
-  const existingScript = document.querySelector('script[src*="voiceflow.com/widget"]');
-  if (existingScript) {
-    existingScript.remove();
-  }
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
-    script.type = 'text/javascript';
     script.onload = () => {
       // @ts-ignore
       window.voiceflow.chat.load({
-        verify: { projectID: '67f8290560582c52d7eb0b06' },
+        verify: { projectID: '67fad7a75ae9b06f689a1399' },
         url: 'https://general-runtime.voiceflow.com',
         versionID: 'production',
         voice: {
